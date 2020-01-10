@@ -6,7 +6,7 @@ class WotdParser {
   static WotdModel parseWotdData(String data) {
     try {
       var doc = parse(data);
-      var element = doc.querySelector("li.wotd-item");
+      var element = doc.querySelector(".wotd-item-wrapper");
       if (element != null) {
         return _getValidWotd(element);
       }
@@ -42,7 +42,7 @@ class WotdParser {
   }
 
   static String getWord(Element elm) {
-    var wordElm = elm.querySelector(".wotd-item__definition h1");
+    var wordElm = elm.querySelector(".wotd-item-headword__word h1");
     if (wordElm != null) {
       return wordElm.text.trim();
     }
@@ -50,8 +50,7 @@ class WotdParser {
   }
 
   static String getPronounciation(Element elm) {
-    var nounceElm = elm.querySelector(
-        ".wotd-item__definition .wotd-item__definition__pronunciation");
+    var nounceElm = elm.querySelector(".wotd-item-headword__pronunciation");
     if (nounceElm != null) {
       return nounceElm.text.trim();
     }
@@ -59,16 +58,20 @@ class WotdParser {
   }
 
   static String getDefinition(Element elm) {
-    var defElm = elm
-        .querySelector(".wotd-item__definition .wotd-item__definition__text");
+    var defElm = elm.querySelector(".wotd-item-headword__pos p:last-child");
     if (defElm != null) {
-      return defElm.text.trim();
+      var def = defElm.text.trim();
+      def = def.replaceAllMapped(RegExp(r'(\s)+'), (m) {
+        return ' ';
+      });
+      return def;
     }
     return null;
   }
 
   static String getAudioFile(Element elm) {
-    var audioElm = elm.querySelector("a.wotd-item__definition__listen");
+    var audioElm =
+        elm.querySelector("a.wotd-item-headword__pronunciation-audio");
     if (audioElm != null) {
       return audioElm.attributes["href"];
     }
@@ -76,7 +79,7 @@ class WotdParser {
   }
 
   static String getDefinitionLink(Element elm) {
-    var linkELm = elm.querySelector(".wotd-item__definition a.wotd-item__link");
+    var linkELm = elm.querySelector("a.wotd-item-headword__anchors-link");
     if (linkELm != null) {
       return linkELm.attributes["href"];
     }

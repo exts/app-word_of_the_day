@@ -27,8 +27,8 @@ class WotdView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                if (model.audiofile != null && model.audiofile.isNotEmpty)
-                  _playPronounciation(),
+//                if (model.audiofile != null && model.audiofile.isNotEmpty)
+//                  _playPronounciation(),
               ],
             ),
             if (model.pronounced != null && model.pronounced.isNotEmpty)
