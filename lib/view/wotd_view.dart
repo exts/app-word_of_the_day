@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:word_of_the_day/model/wotd_model.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:fluttery_audio/fluttery_audio.dart';
+import 'package:word_of_the_day/domain/wotd/wotd_model.dart';
+//import 'package:fluttery_audio/fluttery_audio.dart';
 
 class WotdView extends StatelessWidget {
   final WotdModel model;
@@ -77,7 +77,7 @@ class WotdView extends StatelessWidget {
     }
   }
 
-  Widget _playPronounciation() {
+/*Widget  Widget _playPronounciation() {
     return new Audio(
       audioUrl: model.audiofile,
 //      playbackState: PlaybackState.paused,
@@ -108,5 +108,5 @@ class WotdView extends StatelessWidget {
         );
       },
     );
-  }
+  }*/
 }

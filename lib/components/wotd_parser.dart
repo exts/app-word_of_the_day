@@ -1,36 +1,40 @@
-import 'package:html/parser.dart' show parse;
 import 'package:html/dom.dart';
-import 'package:word_of_the_day/model/wotd_model.dart';
+import 'package:html/parser.dart' show parse;
+import 'package:word_of_the_day/domain/wotd/wotd_model.dart';
 
 class WotdParser {
-  static WotdModel parseWotdData(String data) {
-    try {
-      var doc = parse(data);
-      var element = doc.querySelector(".wotd-item-wrapper");
-      if (element != null) {
-        return _getValidWotd(element);
-      }
-    } catch (e) {}
+  String html;
+  Document document;
+
+  WotdParser(this.html) {
+    document = parse(this.html);
+  }
+
+  WotdModel build() {
+    var element = document?.querySelector(".wotd-item-wrapper");
+    if (element != null) {
+      return _buildWotd(element);
+    }
     return null;
   }
 
-  static WotdModel _getValidWotd(Element element) {
-    var date = getDate(element) ?? "";
-    var word = getWord(element) ?? "";
-    var audioFile = getAudioFile(element) ?? "";
-    var definition = getDefinition(element) ?? "";
-    var nounciation = getPronounciation(element) ?? "";
-    var definitionLink = getDefinitionLink(element) ?? "";
+  WotdModel _buildWotd(Element elm) {
+    var word = findWord(elm);
+    var definition = findDefinition(elm);
 
     if (word.isEmpty || definition.isEmpty) {
       return null;
     }
 
-    return WotdModel(
-        date, word, nounciation, definition, audioFile, definitionLink);
+    var date = findDate(elm);
+    var audio = findAudioFile(elm);
+    var nounce = findPronounciation(elm);
+    var defLink = findDefinitionLink(elm);
+
+    return WotdModel(date, word, nounce, definition, audio, defLink);
   }
 
-  static String getDate(Element elm) {
+  String findDate(Element elm) {
     if (!elm.attributes.containsKey("data-name")) {
       return null;
     }
@@ -41,7 +45,7 @@ class WotdParser {
     return elmList.join("-");
   }
 
-  static String getWord(Element elm) {
+  String findWord(Element elm) {
     var wordElm = elm.querySelector(".wotd-item-headword__word h1");
     if (wordElm != null) {
       return wordElm.text.trim();
@@ -49,7 +53,7 @@ class WotdParser {
     return null;
   }
 
-  static String getPronounciation(Element elm) {
+  String findPronounciation(Element elm) {
     var nounceElm = elm.querySelector(".wotd-item-headword__pronunciation");
     if (nounceElm != null) {
       return nounceElm.text.trim();
@@ -57,7 +61,7 @@ class WotdParser {
     return null;
   }
 
-  static String getDefinition(Element elm) {
+  String findDefinition(Element elm) {
     var defElm = elm.querySelector(".wotd-item-headword__pos p:last-child");
     if (defElm != null) {
       var def = defElm.text.trim();
@@ -69,7 +73,7 @@ class WotdParser {
     return null;
   }
 
-  static String getAudioFile(Element elm) {
+  String findAudioFile(Element elm) {
     var audioElm =
         elm.querySelector("a.wotd-item-headword__pronunciation-audio");
     if (audioElm != null) {
@@ -78,7 +82,7 @@ class WotdParser {
     return null;
   }
 
-  static String getDefinitionLink(Element elm) {
+  String findDefinitionLink(Element elm) {
     var linkELm = elm.querySelector("a.wotd-item-headword__anchors-link");
     if (linkELm != null) {
       return linkELm.attributes["href"];

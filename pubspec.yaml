@@ -8,12 +8,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  provider: ^2.0.1
+  provider: ^4.0.0
   html: ^0.14.0+2
   http: ^0.12.0+2
   webview_flutter: ^0.3.7+1
   url_launcher: ^5.0.2
-  fluttery_audio: ^0.0.4
+  #fluttery_audio: ^0.0.4
   fluttertoast: ^3.1.0
   connectivity: ^0.4.3+1
 
