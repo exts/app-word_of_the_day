@@ -27,9 +27,7 @@ class WotdScreen extends StatelessWidget {
               case ConnectionState.waiting:
                 return _showLoadingIndicator();
               default:
-                if (_showOfflineToast()) {
-                  return Container();
-                }
+                _showOfflineToast();
 
                 if (snapshot.hasData) {
                   return _showWotdView(snapshot.data);
@@ -73,8 +71,7 @@ class WotdScreen extends StatelessWidget {
     );
   }
 
-  bool _showOfflineToast() {
-    bool checker = false;
+  void _showOfflineToast() {
     OnlineChecker.isNotOnline().then((result) {
       if (result) {
         Fluttertoast.showToast(
@@ -84,10 +81,7 @@ class WotdScreen extends StatelessWidget {
           toastLength: Toast.LENGTH_LONG,
           backgroundColor: Colors.red,
         );
-        checker = true;
       }
     });
-
-    return checker;
   }
 }
