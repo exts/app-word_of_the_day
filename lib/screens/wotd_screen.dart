@@ -3,42 +3,44 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:word_of_the_day/components/online_checker.dart';
+import 'package:word_of_the_day/domain/wotd/widgets/wotd_default_view.dart';
+import 'package:word_of_the_day/domain/wotd/wotd_model.dart';
 import 'package:word_of_the_day/domain/wotd/wotd_provider.dart';
 
 class WotdScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Word of the Day!"),
-        centerTitle: true,
-        actions: <Widget>[
-          _refreshButton(() => null),
-        ],
-      ),
-      body: Consumer<WotdProvider>(
-        builder: (context, model, _) {
-          return FutureBuilder(
-            future: model.loadWordOfTheDay(),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                case ConnectionState.waiting:
-                  return _showLoadingIndicator();
-                default:
-                  if (_showOfflineToast()) {
-                    return Container();
-                  }
+    return Consumer<WotdProvider>(builder: (context, model, _) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text("Word of the Day!"),
+          centerTitle: true,
+          actions: <Widget>[
+            _refreshButton(() => model.reload()),
+          ],
+        ),
+        body: FutureBuilder(
+          future: model.loadWordOfTheDay(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return _showLoadingIndicator();
+              default:
+                if (_showOfflineToast()) {
+                  return Container();
+                }
 
-                  if (snapshot.hasData) {}
+                if (snapshot.hasData) {
+                  return _showWotdView(snapshot.data);
+                }
 
-                  return _showInvalidResultsIndicator();
-              }
-            },
-          );
-        },
-      ),
-    );
+                return _showInvalidResultsIndicator();
+            }
+          },
+        ),
+      );
+    });
   }
 
   Widget _refreshButton(onpressed) {
@@ -52,6 +54,11 @@ class WotdScreen extends StatelessWidget {
     return Center(
       child: CircularProgressIndicator(),
     );
+  }
+
+  Widget _showWotdView(WotdModel model) {
+    return WotdDefaultView(
+        model.word, model.definition, model.pronounced, model.weblink);
   }
 
   Widget _showInvalidResultsIndicator() {
