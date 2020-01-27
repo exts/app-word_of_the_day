@@ -67,6 +67,7 @@ class WotdScreen extends StatelessWidget {
   }
 
   bool _showOfflineToast() {
+    bool checker = false;
     OnlineChecker.isNotOnline().then((result) {
       if (result) {
         Fluttertoast.showToast(
@@ -76,9 +77,10 @@ class WotdScreen extends StatelessWidget {
           toastLength: Toast.LENGTH_LONG,
           backgroundColor: Colors.red,
         );
-        return true;
+        checker = true;
       }
-      return false;
     });
+
+    return checker;
   }
 }
