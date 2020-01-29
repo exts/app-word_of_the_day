@@ -20,16 +20,18 @@ class WotdDefaultView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _showWord(),
-              if (_hasPronounciation()) _showPronounciation(),
-              _showDefinition(),
-              if (_hasDefinitionLink()) _showDefinitionLinkButton(context),
-            ],
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _showWord(),
+                if (_hasPronounciation()) _showPronounciation(),
+                _showDefinition(),
+                if (_hasDefinitionLink()) _showDefinitionLinkButton(context),
+              ],
+            ),
           ),
         )
       ],

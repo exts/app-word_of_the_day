@@ -10,35 +10,34 @@ import 'package:word_of_the_day/domain/wotd/wotd_provider.dart';
 class WotdScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<WotdProvider>(builder: (context, model, _) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text("Word of the Day!"),
-          centerTitle: true,
-          actions: <Widget>[
-            _refreshButton(() => model.reload()),
-          ],
-        ),
-        body: FutureBuilder(
-          future: model.loadWordOfTheDay(),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return _showLoadingIndicator();
-              default:
-                _showOfflineToast();
+    var model = Provider.of<WotdProvider>(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Word of the Day!"),
+        centerTitle: true,
+        actions: <Widget>[
+          _refreshButton(() => model.reload()),
+        ],
+      ),
+      body: FutureBuilder(
+        future: model.loadWordOfTheDay(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return _showLoadingIndicator();
+            default:
+              _showOfflineToast();
 
-                if (snapshot.hasData) {
-                  return _showWotdView(snapshot.data);
-                }
+              if (snapshot.hasData) {
+                return _showWotdView(snapshot.data);
+              }
 
-                return _showInvalidResultsIndicator();
-            }
-          },
-        ),
-      );
-    });
+              return _showInvalidResultsIndicator();
+          }
+        },
+      ),
+    );
   }
 
   Widget _refreshButton(onpressed) {
