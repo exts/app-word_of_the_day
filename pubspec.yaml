@@ -1,6 +1,6 @@
 name: word_of_the_day
 description: Dictionary.com&#x27;s Word of the Day
-version: 1.0.1+2
+version: 1.2.0+1
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
