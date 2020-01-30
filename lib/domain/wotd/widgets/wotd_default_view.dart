@@ -12,8 +12,8 @@ class WotdDefaultView extends StatelessWidget {
   WotdDefaultView(
       [this.word, this.definition, this.pronunciation, this.definitionLink]);
 
-  bool _hasPronounciation() => pronunciation.isNotEmpty;
-  bool _hasDefinitionLink() => definitionLink.isNotEmpty;
+  bool _hasPronounciation() => pronunciation?.isNotEmpty ?? false;
+  bool _hasDefinitionLink() => definitionLink?.isNotEmpty ?? false;
 
   @override
   Widget build(BuildContext context) {

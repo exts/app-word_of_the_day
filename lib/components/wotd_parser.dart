@@ -31,7 +31,13 @@ class WotdParser {
     var nounce = findPronounciation(elm);
     var defLink = findDefinitionLink(elm);
 
-    return WotdModel(date, word, nounce, definition, audio, defLink);
+    return WotdModel(
+        date: date,
+        word: word,
+        pronounced: nounce,
+        definition: definition,
+        audiofile: audio,
+        weblink: defLink);
   }
 
   String findDate(Element elm) {

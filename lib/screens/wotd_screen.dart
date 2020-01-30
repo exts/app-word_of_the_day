@@ -23,17 +23,16 @@ class WotdScreen extends StatelessWidget {
         future: model.loadWordOfTheDay(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
-            case ConnectionState.none:
             case ConnectionState.waiting:
               return _showLoadingIndicator();
             default:
               _showOfflineToast();
 
-              if (snapshot.hasData) {
+              if (snapshot.hasData && snapshot.data != null) {
                 return _showWotdView(snapshot.data);
+              } else {
+                return _showInvalidResultsIndicator();
               }
-
-              return _showInvalidResultsIndicator();
           }
         },
       ),

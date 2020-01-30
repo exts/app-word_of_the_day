@@ -9,12 +9,12 @@ class WotdModel with ChangeNotifier {
   String weblink;
 
   WotdModel(
-      [this.date,
+      {this.date,
       this.word,
       this.pronounced,
       this.definition,
       this.audiofile,
-      this.weblink]);
+      this.weblink});
 
   void updateFrom(WotdModel model) {
     this.date = model.date;

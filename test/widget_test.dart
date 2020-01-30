@@ -8,6 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:word_of_the_day/domain/wotd/widgets/wotd_default_view.dart';
 import 'package:word_of_the_day/domain/wotd/wotd_model.dart';
 import 'package:word_of_the_day/main.dart';
 import 'package:word_of_the_day/services/definition_service.dart';
@@ -24,35 +25,29 @@ void main() {
       expect(await definitionService.loadWordOfTheDay(), null);
     });
 
-    testWidgets("test empty response view", (WidgetTester tester) async {
-      Future<WotdModel> test;
-
-      when(definitionService.loadWordOfTheDay()).thenReturn(test);
+    testWidgets("test correct value when you couldn't load the data",
+        (WidgetTester tester) async {
+      when(definitionService.loadWordOfTheDay()).thenAnswer((_) => null);
 
       await tester.pumpWidget(MyApp(definitionService));
       await tester.pump();
 
-      var w = find.byType(CircularProgressIndicator);
-      expect(w, findsOneWidget);
-//      w.expect(find.text('Invalid Word'), findsOneWidget);
-//      expect(find.text('Word of the Day!'), findsOneWidget);
+      expect(find.text('Invalid Word of the Day'), findsOneWidget);
+    });
+
+    testWidgets("test return of wotd view w/ word & definition set",
+        (WidgetTester tester) async {
+      var wotd = Future.value(
+          WotdModel(word: "example", definition: "example definition"));
+
+      when(definitionService.loadWordOfTheDay()).thenAnswer((_) => wotd);
+
+      await tester.pumpWidget(MyApp(definitionService));
+      await tester.pump();
+
+      expect(find.byType(WotdDefaultView), findsOneWidget);
+      expect(find.text("example"), findsOneWidget);
+      expect(find.text("example definition"), findsOneWidget);
     });
   });
-
-//  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-////    // Build our app and trigger a frame.
-////    await tester.pumpWidget(MyApp());
-////
-////    // Verify that our counter starts at 0.
-////    expect(find.text('0'), findsOneWidget);
-////    expect(find.text('1'), findsNothing);
-////
-////    // Tap the '+' icon and trigger a frame.
-////    await tester.tap(find.byIcon(Icons.add));
-////    await tester.pump();
-////
-////    // Verify that our counter has incremented.
-////    expect(find.text('0'), findsNothing);
-////    expect(find.text('1'), findsOneWidget);
-//  });
 }
